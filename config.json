@@ -1,0 +1,171 @@
+{
+  "system": {
+    "mode": "simulation",
+    "log_level": "INFO",
+    "timezone": "UTC"
+  },
+  "sensors": {
+    "enabled_sensors": {
+      "gas": true,
+      "temperature": true,
+      "humidity": true,
+      "vibration": true,
+      "pressure": true,
+      "smoke": true,
+      "motion": true
+    },
+    "gas": {
+      "sensor_id": "MQ2_01",
+      "unit": "ppm",
+      "safe_threshold": 1000,
+      "warning_threshold": 1500,
+      "critical_threshold": 2500
+    },
+    "temperature": {
+      "sensor_id": "TEMP_01",
+      "unit": "celsius",
+      "safe_threshold": 25,
+      "warning_threshold": 30,
+      "critical_threshold": 35
+    },
+    "humidity": {
+      "sensor_id": "HUMID_01",
+      "unit": "percent",
+      "optimal_min": 40,
+      "optimal_max": 70
+    },
+    "vibration": {
+      "sensor_id": "VIB_01",
+      "unit": "mm/s",
+      "safe_threshold": 2.0,
+      "warning_threshold": 3.5,
+      "critical_threshold": 5.0
+    },
+    "pressure": {
+      "sensor_id": "PRESS_01",
+      "unit": "kPa",
+      "normal_range": [95.0, 105.0]
+    },
+    "smoke": {
+      "sensor_id": "SMOKE_01",
+      "unit": "normalized",
+      "safe_threshold": 0.2,
+      "warning_threshold": 0.4,
+      "critical_threshold": 0.6
+    },
+    "motion": {
+      "sensor_id": "MOTION_01",
+      "unit": "boolean",
+      "detection_threshold": 0.5
+    }
+  },
+  "monitoring": {
+    "sensor_read_interval": 5,
+    "buffer_size": 100,
+    "data_validation_enabled": true,
+    "sensor_health_calculation_interval": 30,
+    "data_sync_interval": 60
+  },
+  "risk_engine": {
+    "risk_thresholds": {
+      "low": 25,
+      "medium": 50,
+      "high": 75
+    },
+    "risk_weights": {
+      "gas": 0.4,
+      "temperature": 0.3,
+      "vibration": 0.2,
+      "humidity": 0.1
+    },
+    "anomaly_detection": {
+      "method": "isolation_forest",
+      "contamination": 0.05,
+      "enabled": true
+    }
+  },
+  "forecasting": {
+    "enabled": true,
+    "forecast_horizon_minutes": 15,
+    "forecast_interval": 5,
+    "min_history_for_forecast": 30,
+    "method": "exponential_smoothing"
+  },
+  "alerts": {
+    "enabled": true,
+    "buzzer": {
+      "enabled": true,
+      "gpio_pin": 17
+    },
+    "leds": {
+      "enabled": true,
+      "green_pin": 27,
+      "yellow_pin": 22,
+      "red_pin": 23
+    },
+    "alert_thresholds": {
+      "low": 25,
+      "medium": 50,
+      "high": 75,
+      "critical": 85
+    }
+  },
+  "database": {
+    "type": "sqlite",
+    "sqlite": {
+      "path": "data/mine_safety.db"
+    },
+    "postgresql": {
+      "host": "localhost",
+      "port": 5432,
+      "database": "mine_safety",
+      "user": "mine_user",
+      "password": "PLACEHOLDER"
+    },
+    "tables": {
+      "sensor_readings": true,
+      "risk_predictions": true,
+      "anomalies": true,
+      "alerts": true,
+      "what_if_simulations": true,
+      "sensor_health": true
+    }
+  },
+  "api": {
+    "host": "localhost",
+    "port": 8000,
+    "version": "v1",
+    "cors_enabled": true,
+    "debug": false
+  },
+  "frontend": {
+    "type": "react",
+    "port": 3000,
+    "api_base_url": "http://localhost:8000"
+  },
+  "hardware": {
+    "raspberry_pi": {
+      "enabled": false,
+      "gpio_mode": "BCM",
+      "i2c_bus": 1
+    },
+    "simulation": {
+      "enabled": true,
+      "seed": 42,
+      "scenario": "normal"
+    }
+  },
+  "data_retention": {
+    "sensor_readings_days": 90,
+    "predictions_days": 30,
+    "anomalies_days": 30,
+    "alerts_days": 90
+  },
+  "features": {
+    "enable_risk_explanation": true,
+    "enable_what_if_simulation": true,
+    "enable_forecasting": true,
+    "enable_sensor_health": true,
+    "enable_anomaly_detection": true
+  }
+}
