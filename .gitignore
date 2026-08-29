@@ -106,6 +106,9 @@ venv.bak/
 data/raw/*.csv
 data/processed/*.csv
 database/*.db
+*.db
+logs/
+*.log
 
 # OS
 .DS_Store
@@ -113,3 +116,15 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node modules (for React frontend)
+node_modules/
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+frontend/.env.*.local
+
+# Python virtual environments
+venv/
+.venv/
+env/
