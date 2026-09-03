@@ -55,45 +55,45 @@ st.markdown("""
 @st.cache_resource
 def load_data():
     """Load and process data."""
+
     try:
-        # Try loading from CSV
-        if Path('data/processed/mine_safety_features.csv').exists():
-            df = pd.read_csv('data/processed/mine_safety_features.csv')
+        DATA_DIR = PROJECT_ROOT / "data"
+        PROCESSED_DIR = DATA_DIR / "processed"
+
+        # Create folders automatically
+        PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+
+        processed_file = PROCESSED_DIR / "mine_safety_features.csv"
+
+        if processed_file.exists():
+            df = pd.read_csv(processed_file)
+
         else:
-            # Generate fresh data
             st.info("Generating fresh data...")
-            generator = MineDataGenerator(mode='simulation')
-            df_raw = generator.generate_sensor_readings(num_records=5000, days=30)
-            
+
+            generator = MineDataGenerator(mode="simulation")
+
+            df_raw = generator.generate_sensor_readings(
+                num_records=5000,
+                days=30
+            )
+
             preprocessor = DataPreprocessor()
             df_clean = preprocessor.clean_data(df_raw)
-            
+
             engineer = FeatureEngineer()
             df = engineer.create_features(df_clean)
-            
-            # Save
-            df.to_csv('data/processed/mine_safety_features.csv', index=False)
-        
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+            df.to_csv(processed_file, index=False)
+
+        if "timestamp" in df.columns:
+            df["timestamp"] = pd.to_datetime(df["timestamp"])
+
         return df
+
     except Exception as e:
         st.error(f"Error loading data: {e}")
         return None
-
-@st.cache_resource
-def get_analytics(df):
-    """Get analytics results."""
-    return MineAnalytics(df)
-
-@st.cache_resource
-def get_risk_analyzer(df):
-    """Get risk analyzer."""
-    return RiskAnalyzer(df)
-
-@st.cache_resource
-def get_anomaly_detector(df):
-    """Get anomaly detector."""
-    return AnomalyDetector(df)
 
 # ============ SIDEBAR NAVIGATION ============
 st.sidebar.title("⛏️ Mine Safety System")
