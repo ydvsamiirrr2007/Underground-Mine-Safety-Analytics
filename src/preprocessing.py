@@ -20,7 +20,7 @@ class DataPreprocessor:
         print("\n1. Handling missing values...")
         initial_missing = df.isnull().sum().sum()
         df = df.dropna(subset=['timestamp', 'mine_zone', 'gas_level'])
-        df = df.fillna(method='ffill', limit=2)
+        df = df.ffill(limit=2)
         df = df.dropna()
         final_missing = df.isnull().sum().sum()
         self.cleaning_report['missing_values_dropped'] = initial_missing - final_missing
